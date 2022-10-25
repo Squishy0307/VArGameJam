@@ -136,6 +136,65 @@ public partial class @PlayerControlls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""aa0f4b88-7de8-401f-a055-a173eb77631f"",
+            ""actions"": [
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""4526c2eb-c14c-429f-9274-e3c638f3f96b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StartGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""a237e8b9-5752-4f35-81de-78c1d5995acc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""706e94df-07a1-49f6-8c4e-63f8181070fc"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""718bcaf9-c941-4f26-934a-f0271ab03f19"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce199574-7acd-4722-9134-b8ffa3bfde1e"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -144,6 +203,10 @@ public partial class @PlayerControlls : IInputActionCollection2, IDisposable
         m_Controlls = asset.FindActionMap("Controlls", throwIfNotFound: true);
         m_Controlls_Movement = m_Controlls.FindAction("Movement", throwIfNotFound: true);
         m_Controlls_Jump = m_Controlls.FindAction("Jump", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_Accept = m_UI.FindAction("Accept", throwIfNotFound: true);
+        m_UI_StartGame = m_UI.FindAction("StartGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -240,9 +303,55 @@ public partial class @PlayerControlls : IInputActionCollection2, IDisposable
         }
     }
     public ControllsActions @Controlls => new ControllsActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_Accept;
+    private readonly InputAction m_UI_StartGame;
+    public struct UIActions
+    {
+        private @PlayerControlls m_Wrapper;
+        public UIActions(@PlayerControlls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Accept => m_Wrapper.m_UI_Accept;
+        public InputAction @StartGame => m_Wrapper.m_UI_StartGame;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void SetCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            {
+                @Accept.started -= m_Wrapper.m_UIActionsCallbackInterface.OnAccept;
+                @Accept.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnAccept;
+                @Accept.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnAccept;
+                @StartGame.started -= m_Wrapper.m_UIActionsCallbackInterface.OnStartGame;
+                @StartGame.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnStartGame;
+                @StartGame.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnStartGame;
+            }
+            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Accept.started += instance.OnAccept;
+                @Accept.performed += instance.OnAccept;
+                @Accept.canceled += instance.OnAccept;
+                @StartGame.started += instance.OnStartGame;
+                @StartGame.performed += instance.OnStartGame;
+                @StartGame.canceled += instance.OnStartGame;
+            }
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     public interface IControllsActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnAccept(InputAction.CallbackContext context);
+        void OnStartGame(InputAction.CallbackContext context);
     }
 }

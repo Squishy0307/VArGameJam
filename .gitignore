@@ -42,3 +42,6 @@ Logs/shadercompiler-UnityShaderCompiler.exe0.log
 Logs/shadercompiler-AssetImportWorker0.log
 Logs/AssetImportWorker0.log
 Logs/AssetImportWorker0-prev.log
+.idea/.idea.VArGameJam/.idea/encodings.xml
+*.xml
+Logs/AssetImportWorker0-prev.log

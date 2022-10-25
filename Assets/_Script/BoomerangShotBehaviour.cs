@@ -37,7 +37,8 @@ public class BoomerangShotBehaviour : MonoBehaviour
         {
             if (col.gameObject.tag == "Player")
             {
-
+                col.gameObject.GetComponent<PlayerMovement>().playerDed();
+                Destroy(gameObject);
             }
 
             if (col.gameObject.tag == "Ground")

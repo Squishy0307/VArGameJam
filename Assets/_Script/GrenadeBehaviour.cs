@@ -32,6 +32,7 @@ public class GrenadeBehaviour : MonoBehaviour
         for (int i = 0; i < FoundColliders.Length; i++)
         {
             Debug.Log("Found Player: " + i);
+            FoundColliders[i].gameObject.GetComponent<PlayerMovement>().playerDed();
         }
         
         Destroy(gameObject);

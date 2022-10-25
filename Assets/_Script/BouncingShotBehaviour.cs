@@ -1,38 +1,44 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StraightShotBehaviour : MonoBehaviour
+public class BouncingShotBehaviour : MonoBehaviour
 {
-    public float ProjectileVelocity = 5f;
-    public float RotationRate = 5f;
+    public float LaunchVelocity = 5f;
     private Rigidbody2D RBRef;
+
+    public int NumberOfBounces = 3;
+    int BounceCounter = 0;
+    
     private Transform SpriteTransform;
+    public float RotationRate = 5f;
     
     // Start is called before the first frame update
     void Start()
     {
         RBRef = GetComponent<Rigidbody2D>();
+        RBRef.AddForce((transform.right * (Time.deltaTime * LaunchVelocity * 1000)));
+        
         SpriteTransform = transform.GetChild(0);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        RBRef.velocity = (transform.right * (Time.deltaTime * ProjectileVelocity * 100));
         SpriteTransform.transform.Rotate(new Vector3(0, 0, RotationRate * Time.deltaTime * 100));
     }
-
-    public void OnTriggerEnter2D(Collider2D col)
+    
+    public void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("Trigger Entered");
+        BounceCounter++;
+        Debug.Log("Bounce Counter : " + BounceCounter);
+        
         if (col.gameObject.tag == "Player")
         {
             col.gameObject.GetComponent<PlayerMovement>().playerDed();
             Destroy(gameObject);
         }
-        if (col.gameObject.tag == "Ground")
+        else if (BounceCounter > NumberOfBounces)
         {
             Destroy(gameObject);
         }

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f3b6acc14f9204a4e96c63523c22a89b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5fb023bea4bbdbf4d80d56c9ce2727a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,9 +95,9 @@ GameObject:
   - component: {fileID: 3274577369938113069}
   - component: {fileID: 194577799906088556}
   - component: {fileID: 8880348386024607575}
-  - component: {fileID: 4747056431904610619}
+  - component: {fileID: 4362028084434779752}
   m_Layer: 0
-  m_Name: WatermelonBomb
+  m_Name: BlueberryShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,13 +132,13 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_LinearDrag: 0.25
+  m_AngularDrag: 0
+  m_GravityScale: 5
+  m_Material: {fileID: 6200000, guid: 1d8a7b8f48c704e42b0bb23cf165828b, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &8880348386024607575
 CircleCollider2D:
@@ -150,13 +150,13 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.04}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.23
---- !u!114 &4747056431904610619
+  m_Radius: 0.17
+--- !u!114 &4362028084434779752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,10 +165,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7793747037653026291}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e8f8cf8bc83fe144a68cc47156bcc50, type: 3}
+  m_Script: {fileID: 11500000, guid: 04e234e74ae54ac459c3da9f60323686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LaunchVelocity: 5
-  TargetLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  LaunchVelocity: 10
+  NumberOfBounces: 5
+  RotationRate: 5

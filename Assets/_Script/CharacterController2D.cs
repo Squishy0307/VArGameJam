@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,16 +30,19 @@ public class CharacterController2D : MonoBehaviour
 	[Header("Wall Jump and Wall Slide")]
 	[Space]
 
-	private bool wallJumping;
 	[SerializeField] Vector2 wallJumpForce;
 	[SerializeField] float wallJumpTime = 0.5f;
 
-
+	[SerializeField] private float wallCheckRayLength = 0.5f;
 	private bool isTouchingWallRight;
 	private bool isTouchingWallLeft;
+
+	//private RaycastHit2D[] wallHitLeft;
+	private RaycastHit2D[] wallHitRight;
+
 	private bool wallSliding;
-	[SerializeField] Transform wallDetectionPosRight;
-	[SerializeField] Transform wallDetectionPosLeft;
+	[SerializeField] Transform wallRayPosRight;
+	//[SerializeField] Transform wallRayPosLeft;
 	[SerializeField] float wallSlideVelocity = 1f;
 
 
@@ -166,18 +170,40 @@ public class CharacterController2D : MonoBehaviour
 				Flip();
 			}
 		}
-		// If the player should jump...
-		if (m_Grounded && jump && !wallSliding)
+
+
+        //wallHitLeft = Physics2D.RaycastAll(wallRayPosLeft.position, -wallRayPosLeft.transform.right, wallCheckRayLength);
+        wallHitRight = Physics2D.RaycastAll(wallRayPosRight.position, Vector2.right * Mathf.Sign(transform.localScale.x), wallCheckRayLength);
+
+        //isTouchingWallLeft = rayCheck(wallHitLeft);
+        isTouchingWallRight = rayCheck(wallHitRight);
+
+        //draws rays for walldetection
+        drawRays();
+
+        //WALL JUMPING
+        if (jump && isTouchingWallRight && !m_Grounded)
+        {
+            Debug.Log("wallJumpRight");
+            StartCoroutine(wallJumpCoolDown());
+            m_Rigidbody2D.velocity = new Vector2(wallJumpForce.x * -Mathf.Sign(transform.localScale.x), wallJumpForce.y);
+
+        }
+        //END
+
+
+
+        // If the player should jump...
+        if (m_Grounded && jump)
 		{
 			// Add a vertical force to the player.
+			Debug.Log("jump");
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-
 			isJumping = false;
 		}
 
-		isTouchingWallRight = Physics2D.OverlapCircle(wallDetectionPosRight.position, k_CeilingRadius, m_WhatIsGround) && !m_Grounded;
-		isTouchingWallLeft = Physics2D.OverlapCircle(wallDetectionPosLeft.position, k_CeilingRadius, m_WhatIsGround) && !m_Grounded;
+		//Wall Sliding
 
 		if ((isTouchingWallRight || isTouchingWallLeft ) && !m_Grounded && move != 0)
 		{
@@ -196,6 +222,13 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
+	IEnumerator wallJumpCoolDown()
+	{
+		m_MovementSmoothing = 0.3f;
+		yield return new WaitForSeconds(wallJumpTime);
+		m_MovementSmoothing = 0;
+	}
+
 	private void Flip()
 	{
 		// Switch the way the player is labelled as facing.
@@ -207,8 +240,32 @@ public class CharacterController2D : MonoBehaviour
 		transform.localScale = theScale;
 	}
 
-	void setWallJumping()
-    {
-		wallJumping = false;
-    }
+
+	bool rayCheck(RaycastHit2D[] rays)
+	{
+		foreach(RaycastHit2D hit in rays)
+		{
+			if(hit.collider != null)
+			{
+				if(hit.collider.tag != "Player")
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	
+	}
+
+	void drawRays()
+	{
+		//Debug.DrawRay(wallRayPosLeft.position, Vector2.left * wallCheckRayLength, Color.green);
+		Debug.DrawRay(wallRayPosRight.position, Vector2.right * Mathf.Sign(transform.localScale.x) * wallCheckRayLength, Color.green);
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.DrawWireSphere(m_GroundCheck.position, k_GroundedRadius);
+	}
+
 }

@@ -7,6 +7,8 @@ public class shooter : MonoBehaviour
 {
     [SerializeField] Transform shootPos;
 
+    [SerializeField] public AudioSource shootItemSoundEffect;
+
     public GameObject[] fruits;
     public List<int> fruitToSpawnIndex = new List<int>();
 
@@ -34,6 +36,8 @@ public class shooter : MonoBehaviour
     {
         if (value.isPressed && fruitToSpawnIndex.Count > 0)
         {
+            shootItemSoundEffect.Play();
+
             Vector3 rot = shootPos.eulerAngles + new Vector3(0, 0, 90);
 
             Instantiate(fruits[fruitToSpawnIndex[0]], shootPos.position, Quaternion.Euler(rot));

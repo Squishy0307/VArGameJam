@@ -42,3 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: FruitShot
+    uniqueID: 2308577225
+    locked: 0
+  - name: Player
+    uniqueID: 3978861843
+    locked: 0
+  - name: UI
+    uniqueID: 3128957747
+    locked: 0

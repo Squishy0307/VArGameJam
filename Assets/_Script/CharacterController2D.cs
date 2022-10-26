@@ -45,8 +45,15 @@ public class CharacterController2D : MonoBehaviour
 	//[SerializeField] Transform wallRayPosLeft;
 	[SerializeField] float wallSlideVelocity = 1f;
 
+	[Header("Audio Stuff")]
+	[Space]
 
-	[Header("Events")]
+    [SerializeField] private AudioSource jumpSoundEffect;
+    [SerializeField] private AudioSource wallJumpingSoundEffect;
+    [SerializeField] private AudioSource groundedSoundEffect;
+
+
+    [Header("Events")]
 	[Space]
 
 	public UnityEvent OnLandEvent;
@@ -99,7 +106,10 @@ public class CharacterController2D : MonoBehaviour
 			{
 				m_Grounded = true;
 				if (!wasGrounded)
-					OnLandEvent.Invoke();
+				{
+                    groundedSoundEffect.Play();
+                    OnLandEvent.Invoke();
+				}
 			}
 		}
 	}
@@ -184,6 +194,7 @@ public class CharacterController2D : MonoBehaviour
         //WALL JUMPING
         if (jump && isTouchingWallRight && !m_Grounded)
         {
+            wallJumpingSoundEffect.Play();
             Debug.Log("wallJumpRight");
             StartCoroutine(wallJumpCoolDown());
             m_Rigidbody2D.velocity = new Vector2(wallJumpForce.x * -Mathf.Sign(transform.localScale.x), wallJumpForce.y);
@@ -196,6 +207,7 @@ public class CharacterController2D : MonoBehaviour
         // If the player should jump...
         if (m_Grounded && jump)
 		{
+			jumpSoundEffect.Play();
 			// Add a vertical force to the player.
 			Debug.Log("jump");
 			m_Grounded = false;

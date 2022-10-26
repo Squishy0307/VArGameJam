@@ -138,7 +138,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &8880348386024607575
 CircleCollider2D:
@@ -168,7 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8f8cf8bc83fe144a68cc47156bcc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LaunchVelocity: 5
+  radius: 1.5
+  LaunchVelocity: 100
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128

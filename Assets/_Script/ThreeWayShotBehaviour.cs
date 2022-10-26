@@ -12,13 +12,13 @@ public class ThreeWayShotBehaviour : MonoBehaviour
     {
         Instantiate(Bullet, transform);
         
-        GameObject Bullet2 = Instantiate(Bullet, transform);
+        GameObject Bullet2 = Instantiate(Bullet, transform.position, Quaternion.Euler(new Vector3(0, 0, Spread)));
         
-        Bullet2.transform.eulerAngles = new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z + Spread);
+        //Bullet2.transform.eulerAngles = new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z + Spread);
         
-        GameObject Bullet3 = Instantiate(Bullet, transform);
+        GameObject Bullet3 = Instantiate(Bullet, transform.position ,Quaternion.Euler(new Vector3(0,0,-Spread)));
         
-        Bullet3.transform.eulerAngles = new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z - Spread);
+        //Bullet3.transform.eulerAngles = new Vector3 (transform.rotation.x, transform.rotation.y, transform.rotation.z - Spread);
         
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GrenadeBehaviour : MonoBehaviour
 {
-
+    public float radius = 5f;
     public float LaunchVelocity = 5f;
     private Rigidbody2D RBRef;
     public LayerMask TargetLayer;
@@ -17,24 +17,31 @@ public class GrenadeBehaviour : MonoBehaviour
         RBRef.AddForce((transform.right * (Time.deltaTime * LaunchVelocity * 1000)));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D col)
+    public void OnTriggerEnter2D(Collision2D col)
     {
         Debug.Log("Watermelon collided");
-        
-        Collider2D[] FoundColliders = Physics2D.OverlapCircleAll(transform.position, 50f, TargetLayer);
 
-        for (int i = 0; i < FoundColliders.Length; i++)
+        if (col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("Found Player: " + i);
-            FoundColliders[i].gameObject.GetComponent<PlayerMovement>().playerDed();
+
+            Collider2D[] FoundColliders = Physics2D.OverlapCircleAll(transform.position, radius, TargetLayer);
+
+            if(FoundColliders.Length > 0)
+            {
+                for (int i = 0; i < FoundColliders.Length; i++)
+                {
+                    Debug.Log("Found Player: " + i);
+                    FoundColliders[i].gameObject.GetComponent<PlayerMovement>().playerDed();
+                }
+            }
+
+            Destroy(gameObject);
         }
-        
-        Destroy(gameObject);
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }
+
 }

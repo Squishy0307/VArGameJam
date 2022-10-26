@@ -9,12 +9,16 @@ public class Fruit_Spawner : MonoBehaviour
 
     private SpriteRenderer sr;
 
+    [SerializeField] private AudioSource itemSpawnSound;
+
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
 
         currentFruitIndex = Random.Range(0, fruits.Length);
         sr.sprite = fruits[currentFruitIndex].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+
+        itemSpawnSound.Play();
 
     }
 

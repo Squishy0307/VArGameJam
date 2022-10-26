@@ -49,9 +49,9 @@ public class CharacterController2D : MonoBehaviour
 	[Space]
 
     [SerializeField] private AudioSource jumpSoundEffect;
-    [SerializeField] private AudioSource wallJumpingSoundEffect;
-    [SerializeField] private AudioSource groundedSoundEffect;
-
+    [SerializeField] public AudioClip groundedSoundEffect;
+    [SerializeField] private AudioClip wallJumpingSoundEffect;
+    AudioSource audioSource;
 
     [Header("Events")]
 	[Space]
@@ -66,7 +66,9 @@ public class CharacterController2D : MonoBehaviour
 
 	private void Awake()
 	{
-		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
@@ -107,7 +109,7 @@ public class CharacterController2D : MonoBehaviour
 				m_Grounded = true;
 				if (!wasGrounded)
 				{
-                    groundedSoundEffect.Play();
+					audioSource.PlayOneShot(groundedSoundEffect);
                     OnLandEvent.Invoke();
 				}
 			}
@@ -194,7 +196,7 @@ public class CharacterController2D : MonoBehaviour
         //WALL JUMPING
         if (jump && isTouchingWallRight && !m_Grounded)
         {
-            wallJumpingSoundEffect.Play();
+            audioSource.PlayOneShot(wallJumpingSoundEffect);
             Debug.Log("wallJumpRight");
             StartCoroutine(wallJumpCoolDown());
             m_Rigidbody2D.velocity = new Vector2(wallJumpForce.x * -Mathf.Sign(transform.localScale.x), wallJumpForce.y);

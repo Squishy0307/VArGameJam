@@ -17,13 +17,13 @@ public class GrenadeBehaviour : MonoBehaviour
         RBRef.AddForce((transform.right * (Time.deltaTime * LaunchVelocity * 1000)));
     }
 
-    public void OnTriggerEnter2D(Collision2D col)
+    public void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log("Watermelon collided");
 
         if (col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Ground"))
         {
-
+            Debug.Log("hit");
             Collider2D[] FoundColliders = Physics2D.OverlapCircleAll(transform.position, radius, TargetLayer);
 
             if(FoundColliders.Length > 0)
